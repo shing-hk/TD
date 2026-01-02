@@ -23,6 +23,7 @@ font-family: Verdana, "Times New Roman", serif;
 letter-spacing: 0.12em;
 }
 
+
 #wrapper {
 margin: 0 auto;
     display: flex;
@@ -71,3 +72,19 @@ padding: 8px 24px;
 color: #fff;
 }
 
+
+/* 移動端修復 - 防止重疊 */
+@media (max-width: 768px) {
+    #left-panel {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 auto 15px auto;
+    }
+    
+    #td-wrapper {
+        margin-top: 0;
+        width: 100%;
+    }
+}
