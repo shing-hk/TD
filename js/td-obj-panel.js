@@ -196,7 +196,7 @@ _TD.a.push(function (TD) {
 				ctx.fillStyle = "rgba(255, 0, 0, " + a + ")";
 				ctx.font = "bold " + (12 * _TD.retina) + "px 'Verdana'";
 				ctx.beginPath();
-				ctx.fillText("+" + this._life_recover2, this.x + 60 * _TD.retina, this.y + 40 * _TD.retina);
+				ctx.fillText("+" + this._life_recover2, this.x + 60 * _TD.retina, this.y + 140 * _TD.retina); //40->140
 				ctx.closePath();
 				this._life_recover_wait --;
 			}
