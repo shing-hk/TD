@@ -103,15 +103,15 @@ var _TD = {
 				switch (cheat_code) {
 					case "money+":
 						this.money += 100000000;
-						this.log("cheat success!");
+						this.log("cheat success! money +100,000,000");
 						break;
 					case "life+":
 						this.life = 100;
-						this.log("cheat success!");
+						this.log("cheat success! life = 100");
 						break;
 					case "life-":
 						this.life = 1;
-						this.log("cheat success!");
+						this.log("cheat success! life = 1");
 						break;
 					case "difficulty+":
 						this.difficulty *= 2;
@@ -121,6 +121,35 @@ var _TD = {
 						this.difficulty /= 2;
 						this.log("cheat success! difficulty = " + this.difficulty);
 						break;
+//add cheat code
+					case "speed+":
+						this.global_speed += 0.1;
+						// 限制最高速度，防止溢出导致怪物穿墙
+						if (this.global_speed > 5) this.global_speed = 5; 
+						this.log("cheat success! global_speed = " + this.global_speed.toFixed(2));
+						break;
+					case "speed-":
+						this.global_speed -= 0.1;
+						// 限制最低速度，防止速度变为负数或 0 导致游戏停止
+						if (this.global_speed < 0.1) this.global_speed = 0.1;
+						this.log("cheat success! global_speed = " + this.global_speed.toFixed(2));
+						break;
+					case "upgradeall":
+						var buildings = this.stage.map.buildings;
+						for (var i = 0; i < buildings.length; i++) {
+							//this.money += 10000000;
+							var b = buildings[i];
+							// Check if the building can be upgraded and call its upgrade method
+							// We loop a few times to try and max them out if possible
+							for (var j = 0; j < 3; j++) { 
+								if (typeof b.upgrade === "function") {
+									b.upgrade();
+								}
+							}
+						}
+						this.log("cheat success! upgraded " + buildings.length + " buildings.");
+						break;
+
 				}
 			},
 

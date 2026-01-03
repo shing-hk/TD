@@ -107,14 +107,15 @@ _TD.a.push(function (TD) {
     ];
     // Exit: rows 7-8, columns 0-15
     var randomExit = [
-        Math.floor(Math.random() * 2) + 6, // row 7-8
+//        Math.floor(Math.random() * 2) + 6, // row 7-8
+	7,
         Math.floor(Math.random() * 8)      // col 0-7
     ];
 //shing
 		var data = {
 			stage_main: {
-				width: 640 * _TD.retina, // px
-				height: 560 * _TD.retina,
+				width: 400 * _TD.retina, // 640px
+				height: 400 * _TD.retina, // 560px
 				init: _stage_main_init,
 				step2: _stage_main_step2
 			},
@@ -133,20 +134,20 @@ _TD.a.push(function (TD) {
 //					grids_cfg: []
 					grids_cfg: [
 						{
-							pos: [Math.floor(Math.random()*4)+2, Math.floor(Math.random()*2)],
+							pos: [Math.floor(Math.random()*2)+2, Math.floor(Math.random()*2)],
 							passable_flag: 0
 						},
 						{
-							pos: [Math.floor(Math.random()*4)+2, Math.floor(Math.random()*2)+2],
+							pos: [Math.floor(Math.random()*2)+2, Math.floor(Math.random()*2)+2],
 							building: "wall"
 						},
 						{
-							pos: [Math.floor(Math.random()*4)+2, Math.floor(Math.random()*2)+4],
+							pos: [Math.floor(Math.random()*2)+2, Math.floor(Math.random()*2)+4],
 							passable_flag: 0
 						},
 						{
 							pos: [Math.floor(Math.random()*2)+4, Math.floor(Math.random()*2)+4],
-							building: "wall"
+							passable_flag: 0
 						},
 						{
 							pos: [Math.floor(Math.random()*2)+4, Math.floor(Math.random()*2)+2],
@@ -161,13 +162,14 @@ _TD.a.push(function (TD) {
 
 				},
 				panel: {
-					x: TD.padding * 2 + TD.grid_size * 16,
+					x: TD.padding * 2 + TD.grid_size * 8, //grid_size 16
 					y: TD.padding,
 					map: {
 						grid_x: 3,
 						grid_y: 3,
 						x: 0,
-						y: 110 * _TD.retina,
+						//y: 110 * _TD.retina,
+						y: 0,
 						grids_cfg: [
 							{
 								pos: [0, 0],

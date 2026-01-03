@@ -78,7 +78,7 @@ _TD.a.push(function (TD) {
 						if (this.scene.map.selected_building) {
 							this.scene.panel.btn_upgrade.show();
 							this.scene.panel.btn_sell.show();
-							this.scene.panel.btn_build.show();
+							this.scene.panel.btn_build.hide(); //build.show
 						}
 						//this.desc = TD._t("button_pause_desc_0");
 					}
@@ -166,14 +166,28 @@ _TD.a.push(function (TD) {
 			ctx.fillStyle = "#000";
 			ctx.font = "normal " + (12 * _TD.retina) + "px 'Courier New'";
 			ctx.beginPath();
-			ctx.fillText(TD._t("panel_money_title") + TD.money, this.x, this.y);
-			ctx.fillText(TD._t("panel_score_title") + TD.score, this.x, this.y + 20 * _TD.retina);
-			ctx.fillText(TD._t("panel_life_title") + TD.life, this.x, this.y + 40 * _TD.retina);
+			ctx.fillText(TD._t("panel_money_title") + TD.money, this.x, this.y + 100 * _TD.retina);
+			ctx.fillText(TD._t("panel_score_title") + TD.score, this.x, this.y + 120 * _TD.retina);
+			ctx.fillText(TD._t("panel_life_title") + TD.life, this.x, this.y + 140 * _TD.retina);
 			ctx.fillText(TD._t("panel_building_title") + this.map.buildings.length,
-				this.x, this.y + 60 * _TD.retina);
+				this.x, this.y + 160 * _TD.retina);
 			ctx.fillText(TD._t("panel_monster_title") + this.map.monsters.length,
-				this.x, this.y + 80 * _TD.retina);
-			ctx.fillText(TD._t("wave_info", [this.scene.wave]), this.x, this.y + 210 * _TD.retina);
+				this.x, this.y + 180 * _TD.retina);
+			ctx.fillText(TD._t("wave_info", [this.scene.wave]), this.x, this.y + 200 * _TD.retina);
+
+			// Difficulty on a new line (20px below Wave Info), rounded to 2 decimal places
+			var difficultyValue = TD.difficulty || 0; 
+			ctx.fillText("Diff. " + difficultyValue.toFixed(2), 
+			    this.x, this.y + 220 * _TD.retina);
+
+			// Speed on a new line (20px below Wave Info), rounded to 2 decimal places
+			var speedValue = TD.global_speed || 0; 
+			ctx.fillText("Speed " + speedValue.toFixed(2), 
+			    this.x, this.y + 240 * _TD.retina);
+
+
+
+
 			ctx.closePath();
 
 			if (this._life_recover_wait) {
@@ -188,13 +202,13 @@ _TD.a.push(function (TD) {
 			}
 
 			// Draw version information in the lower right corner
-			ctx.textAlign = "right";
-			ctx.fillStyle = "#666";
-			ctx.font = "normal " + (12 * _TD.retina) + "px 'Courier New'";
-			ctx.beginPath();
-			ctx.fillText("version: " + TD.version, TD.stage.width - TD.padding,
-				TD.stage.height - TD.padding * 2);
-			ctx.closePath();
+//			ctx.textAlign = "right";
+//			ctx.fillStyle = "#666";
+//			ctx.font = "normal " + (12 * _TD.retina) + "px 'Courier New'";
+//			ctx.beginPath();
+//			ctx.fillText("version: " + TD.version, TD.stage.width - TD.padding,
+//				TD.stage.height - TD.padding * 2);
+//			ctx.closePath();
 
 			// Draw FPS information in the lower left corner
 			ctx.textAlign = "left";

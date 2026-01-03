@@ -127,7 +127,7 @@ _TD.a.push(function (TD) {
 				if (this.map.selected_building) {
 					this.scene.panel.btn_upgrade.show();
 					this.scene.panel.btn_sell.show();
-					this.scene.panel.btn_build.show();
+					this.scene.panel.btn_build.hide(); //originally build.show
 					this.updateBtnDesc();
 				} else {
 					this.scene.panel.btn_upgrade.hide();

@@ -174,7 +174,8 @@ _TD.a.push(function (TD) {
 						grid_x: 3,
 						grid_y: 3,
 						x: 0,
-						y: 110 * _TD.retina,
+						//y: 110 * _TD.retina,
+						y: 0,
 						grids_cfg: [
 							{
 								pos: [0, 0],
