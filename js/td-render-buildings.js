@@ -10,242 +10,227 @@
 // _TD.a.push begin
 _TD.a.push(function (TD) {
 
-	function lineTo2(ctx, x0, y0, x1, y1, len) {
-		var x2, y2, a, b, p, xt,
-			a2, b2, c2;
-
-		if (x0 == x1) {
-			x2 = x0;
-			y2 = y1 > y0 ? y0 + len : y0 - len;
-		} else if (y0 == y1) {
-			y2 = y0;
-			x2 = x1 > x0 ? x0 + len : x0 - len;
-		} else {
-			// 解一元二次方程
-			a = (y0 - y1) / (x0 - x1);
-			b = y0 - x0 * a;
-			a2 = a * a + 1;
-			b2 = 2 * (a * (b - y0) - x0);
-			c2 = Math.pow(b - y0, 2) + x0 * x0 - Math.pow(len, 2);
-			p = Math.pow(b2, 2) - 4 * a2 * c2;
-			if (p < 0) {
-//				TD.log("ERROR: [a, b, len] = [" + ([a, b, len]).join(", ") + "]");
-				return [0, 0];
-			}
-			p = Math.sqrt(p);
-			xt = (-b2 + p) / (2 * a2);
-			if ((x1 - x0 > 0 && xt - x0 > 0) ||
-				(x1 - x0 < 0 && xt - x0 < 0)) {
-				x2 = xt;
-				y2 = a * x2 + b;
-			} else {
-				x2 = (-b2 - p) / (2 * a2);
-				y2 = a * x2 + b;
-			}
-		}
-
-		ctx.lineCap = "round";
-		ctx.moveTo(x0, y0);
-		ctx.lineTo(x2, y2);
-
-		return [x2, y2];
+	// 預先載入建築物圖片
+	var buildingImages = {};
+	var imagesLoaded = false;
+	
+	// 圖片列表
+	var imageList = [
+		{ type: "cannon", src: "images/cannon.png" },
+		{ type: "LMG", src: "images/lmg.png" },
+		{ type: "HMG", src: "images/hmg.png" },
+		{ type: "laser_gun", src: "images/laser_gun.png" },
+		{ type: "super_gun", src: "images/super_gun.png" },
+		{ type: "wall", src: "images/wall.png" }
+	];
+	
+	// 載入所有圖片
+	function loadBuildingImages() {
+		var imagesToLoad = imageList.length;
+		var imagesLoadedCount = 0;
+		
+		imageList.forEach(function(item) {
+			var img = new Image();
+			img.onload = function() {
+				imagesLoadedCount++;
+				if (imagesLoadedCount === imagesToLoad) {
+					imagesLoaded = true;
+					TD.log("所有建築物圖片載入完成");
+				}
+			};
+			img.onerror = function() {
+				TD.log("載入圖片失敗: " + item.src);
+				imagesLoadedCount++;
+				// 即使圖片載入失敗，也繼續執行
+				if (imagesLoadedCount === imagesToLoad) {
+					imagesLoaded = true;
+				}
+			};
+			img.src = item.src;
+			buildingImages[item.type] = img;
+		});
 	}
+	
+	// 開始載入圖片
+	loadBuildingImages();
 
 	var renderFunctions = {
 		"cannon": function (b, ctx, map, gs, gs2) {
 			var target_position = b.getTargetPosition();
-
-			ctx.fillStyle = "#393";
-			ctx.strokeStyle = "#000";
-			ctx.beginPath();
-			ctx.lineWidth = _TD.retina;
-			ctx.arc(b.cx, b.cy, gs2 - 5, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.lineWidth = 3 * _TD.retina;
-			ctx.beginPath();
-			ctx.moveTo(b.cx, b.cy);
-			b.muzzle = lineTo2(ctx, b.cx, b.cy, target_position[0], target_position[1], gs2);
-			ctx.closePath();
-//			ctx.fill();
-			ctx.stroke();
-
-			ctx.lineWidth = _TD.retina;
-			ctx.fillStyle = "#060";
-			ctx.beginPath();
-			ctx.arc(b.cx, b.cy, 7 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.fillStyle = "#cec";
-			ctx.beginPath();
-			ctx.arc(b.cx + 2, b.cy - 2, 3 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-
+			
+			// 如果有圖片就使用圖片，否則使用原始繪製
+			if (imagesLoaded && buildingImages["cannon"]) {
+				var img = buildingImages["cannon"];
+				var imgSize = gs * 0.9; // 圖片大小為格子的90%
+				ctx.drawImage(img, b.cx - imgSize/2, b.cy - imgSize/2, imgSize, imgSize);
+			} else {
+				// 原始繪製代碼作為備份
+				ctx.fillStyle = "#393";
+				ctx.strokeStyle = "#000";
+				ctx.beginPath();
+				ctx.lineWidth = _TD.retina;
+				ctx.arc(b.cx, b.cy, gs2 - 5, 0, Math.PI * 2, true);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			}
+			
+			// 炮管仍然用線條繪製（保持瞄準效果）
+//			if (b.is_weapon && b.target) {
+//				ctx.lineWidth = 3 * _TD.retina;
+//				ctx.strokeStyle = "#000";
+//				ctx.beginPath();
+//				ctx.moveTo(b.cx, b.cy);
+//				ctx.lineTo(target_position[0], target_position[1]);
+//				ctx.stroke();
+//			}
 		},
 		"LMG": function (b, ctx, map, gs, gs2) {
 			var target_position = b.getTargetPosition();
-
-			ctx.fillStyle = "#36f";
-			ctx.strokeStyle = "#000";
-			ctx.beginPath();
-			ctx.lineWidth = _TD.retina;
-			ctx.arc(b.cx, b.cy, 7 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.lineWidth = 2 * _TD.retina;
-			ctx.beginPath();
-			ctx.moveTo(b.cx, b.cy);
-			b.muzzle = lineTo2(ctx, b.cx, b.cy, target_position[0], target_position[1], gs2);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.lineWidth = _TD.retina;
-			ctx.fillStyle = "#66c";
-			ctx.beginPath();
-			ctx.arc(b.cx, b.cy, 5 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.fillStyle = "#ccf";
-			ctx.beginPath();
-			ctx.arc(b.cx + 1, b.cy - 1, 2 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-
+			
+			if (imagesLoaded && buildingImages["LMG"]) {
+				var img = buildingImages["LMG"];
+				var imgSize = gs * 0.8;
+				ctx.drawImage(img, b.cx - imgSize/2, b.cy - imgSize/2, imgSize, imgSize);
+			} else {
+				ctx.fillStyle = "#36f";
+				ctx.strokeStyle = "#000";
+				ctx.beginPath();
+				ctx.lineWidth = _TD.retina;
+				ctx.arc(b.cx, b.cy, 7 * _TD.retina, 0, Math.PI * 2, true);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			}
+			
+//			if (b.is_weapon && b.target) {
+//				ctx.lineWidth = 2 * _TD.retina;
+//				ctx.strokeStyle = "#000";
+//				ctx.beginPath();
+//				ctx.moveTo(b.cx, b.cy);
+//				ctx.lineTo(target_position[0], target_position[1]);
+//				ctx.stroke();
+//			}
 		},
 		"HMG": function (b, ctx, map, gs, gs2) {
 			var target_position = b.getTargetPosition();
-
-			ctx.fillStyle = "#933";
-			ctx.strokeStyle = "#000";
-			ctx.beginPath();
-			ctx.lineWidth = _TD.retina;
-			ctx.arc(b.cx, b.cy, gs2 - 2, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.lineWidth = 5 * _TD.retina;
-			ctx.beginPath();
-			ctx.moveTo(b.cx, b.cy);
-			b.muzzle = lineTo2(ctx, b.cx, b.cy, target_position[0], target_position[1], gs2);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.lineWidth = _TD.retina;
-			ctx.fillStyle = "#630";
-			ctx.beginPath();
-			ctx.arc(b.cx, b.cy, gs2 - 5 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.fillStyle = "#960";
-			ctx.beginPath();
-			ctx.arc(b.cx + 1, b.cy - 1, 8 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-
-			ctx.fillStyle = "#fcc";
-			ctx.beginPath();
-			ctx.arc(b.cx + 3, b.cy - 3, 4 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-
+			
+			if (imagesLoaded && buildingImages["HMG"]) {
+				var img = buildingImages["HMG"];
+				var imgSize = gs * 0.9;
+				ctx.drawImage(img, b.cx - imgSize/2, b.cy - imgSize/2, imgSize, imgSize);
+			} else {
+				ctx.fillStyle = "#933";
+				ctx.strokeStyle = "#000";
+				ctx.beginPath();
+				ctx.lineWidth = _TD.retina;
+				ctx.arc(b.cx, b.cy, gs2 - 2, 0, Math.PI * 2, true);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			}
+			
+//			if (b.is_weapon && b.target) {
+//				ctx.lineWidth = 5 * _TD.retina;
+//				ctx.strokeStyle = "#000";
+//				ctx.beginPath();
+//				ctx.moveTo(b.cx, b.cy);
+//				ctx.lineTo(target_position[0], target_position[1]);
+//				ctx.stroke();
+//			}
+		},
+		"laser_gun": function (b, ctx, map, gs, gs2) {
+			if (imagesLoaded && buildingImages["laser_gun"]) {
+				var img = buildingImages["laser_gun"];
+				var imgSize = gs * 0.9;
+				ctx.drawImage(img, b.cx - imgSize/2, b.cy - imgSize/2, imgSize, imgSize);
+			} else {
+				ctx.fillStyle = "#f00";
+				ctx.strokeStyle = "#000";
+				ctx.beginPath();
+				ctx.lineWidth = _TD.retina;
+				ctx.moveTo(b.cx, b.cy - 10 * _TD.retina);
+				ctx.lineTo(b.cx - 8.66 * _TD.retina, b.cy + 5 * _TD.retina);
+				ctx.lineTo(b.cx + 8.66 * _TD.retina, b.cy + 5 * _TD.retina);
+				ctx.lineTo(b.cx, b.cy - 10 * _TD.retina);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			}
+			
+			// 激光效果仍然保留
+			if (b.type == "laser_gun" && b.target && b.target.is_valid) {
+				ctx.lineWidth = 3 * _TD.retina;
+				ctx.strokeStyle = "rgba(50, 50, 200, 0.4)";
+				ctx.beginPath();
+				ctx.moveTo(b.cx, b.cy);
+				ctx.lineTo(b.target.cx, b.target.cy);
+				ctx.stroke();
+			}
 		},
 		"wall": function (b, ctx, map, gs, gs2) {
-			ctx.lineWidth = _TD.retina;
-			ctx.fillStyle = "#666";
-			ctx.strokeStyle = "#000";
-			ctx.fillRect(b.cx - gs2 + 1, b.cy - gs2 + 1, gs - 1, gs - 1);
-			ctx.beginPath();
-			ctx.moveTo(b.cx - gs2 + 0.5, b.cy - gs2 + 0.5);
-			ctx.lineTo(b.cx - gs2 + 0.5, b.cy + gs2 + 0.5);
-			ctx.lineTo(b.cx + gs2 + 0.5, b.cy + gs2 + 0.5);
-			ctx.lineTo(b.cx + gs2 + 0.5, b.cy - gs2 + 0.5);
-			ctx.lineTo(b.cx - gs2 + 0.5, b.cy - gs2 + 0.5);
-			ctx.moveTo(b.cx - gs2 + 0.5, b.cy + gs2 + 0.5);
-			ctx.lineTo(b.cx + gs2 + 0.5, b.cy - gs2 + 0.5);
-			ctx.moveTo(b.cx - gs2 + 0.5, b.cy - gs2 + 0.5);
-			ctx.lineTo(b.cx + gs2 + 0.5, b.cy + gs2 + 0.5);
-			ctx.closePath();
-			ctx.stroke();
+			if (imagesLoaded && buildingImages["wall"]) {
+				var img = buildingImages["wall"];
+				var imgSize = gs * 0.8;
+//				ctx.drawImage(img, b.cx - gs2, b.cy - gs2, gs, gs);
+				ctx.drawImage(img, b.cx - imgSize/2, b.cy - imgSize/2, imgSize, imgSize);
+			} else {
+				ctx.lineWidth = _TD.retina;
+				ctx.fillStyle = "#666";
+				ctx.strokeStyle = "#000";
+				ctx.fillRect(b.cx - gs2 + 1, b.cy - gs2 + 1, gs - 1, gs - 1);
+				ctx.beginPath();
+				ctx.moveTo(b.cx - gs2 + 0.5, b.cy - gs2 + 0.5);
+				ctx.lineTo(b.cx - gs2 + 0.5, b.cy + gs2 + 0.5);
+				ctx.lineTo(b.cx + gs2 + 0.5, b.cy + gs2 + 0.5);
+				ctx.lineTo(b.cx + gs2 + 0.5, b.cy - gs2 + 0.5);
+				ctx.lineTo(b.cx - gs2 + 0.5, b.cy - gs2 + 0.5);
+				ctx.moveTo(b.cx - gs2 + 0.5, b.cy + gs2 + 0.5);
+				ctx.lineTo(b.cx + gs2 + 0.5, b.cy - gs2 + 0.5);
+				ctx.moveTo(b.cx - gs2 + 0.5, b.cy - gs2 + 0.5);
+				ctx.lineTo(b.cx + gs2 + 0.5, b.cy + gs2 + 0.5);
+				ctx.closePath();
+				ctx.stroke();
+			}
 		},
-		"laser_gun": function (b, ctx/*, map, gs, gs2*/) {
-//			var target_position = b.getTargetPosition();
-			ctx.fillStyle = "#f00";
-			ctx.strokeStyle = "#000";
-			ctx.beginPath();
-			ctx.lineWidth = _TD.retina;
-//			ctx.arc(b.cx, b.cy, gs2 - 5, 0, Math.PI * 2, true);
-			ctx.moveTo(b.cx, b.cy - 10 * _TD.retina);
-			ctx.lineTo(b.cx - 8.66 * _TD.retina, b.cy + 5 * _TD.retina);
-			ctx.lineTo(b.cx + 8.66 * _TD.retina, b.cy + 5 * _TD.retina);
-			ctx.lineTo(b.cx, b.cy - 10 * _TD.retina);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.fillStyle = "#60f";
-			ctx.beginPath();
-			ctx.arc(b.cx, b.cy, 7 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-
-			ctx.fillStyle = "#000";
-			ctx.beginPath();
-			ctx.arc(b.cx, b.cy, 3 * _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-
-			ctx.fillStyle = "#666";
-			ctx.beginPath();
-			ctx.arc(b.cx + 1, b.cy - 1, _TD.retina, 0, Math.PI * 2, true);
-			ctx.closePath();
-			ctx.fill();
-
-			ctx.lineWidth = 3 * _TD.retina;
-			ctx.beginPath();
-			ctx.moveTo(b.cx, b.cy);
-//			b.muzzle = lineTo2(ctx, b.cx, b.cy, target_position[0], target_position[1], gs2);
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
-		},
-		//add new weapon
 		"super_gun": function (b, ctx) {
-		    var retina = _TD.retina;
-		    var size = 12 * retina; // 菱形半徑
-		    // 1. 繪製金黃色菱形底座 (Diamond Shape)
-		    ctx.fillStyle = "#FFD700"; // 金色背景
-		    ctx.strokeStyle = "#000";   // 黑色外框
-		    ctx.lineWidth = 2 * retina;
-		    ctx.beginPath();
-		    ctx.moveTo(b.cx, b.cy - size);          // 上頂點
-		    ctx.lineTo(b.cx - size, b.cy);          // 左頂點
-		    ctx.lineTo(b.cx, b.cy + size);          // 下頂點
-		    ctx.lineTo(b.cx + size, b.cy);          // 右頂點
-		    ctx.closePath();                        // 封閉路徑回上頂點
-		    ctx.fill();
-		    ctx.stroke();
-		    // 2. 繪製紅色字母 "S"
-		    ctx.fillStyle = "#F00";                 // 紅色
-		    ctx.textAlign = "center";
-		    ctx.textBaseline = "middle";
-		    // 字體大小設定為菱形高度的一半左右
-		    ctx.font = "bold " + (14 * retina) + "px 'Arial'"; 
-		    ctx.fillText("S", b.cx, b.cy);          // 在中心點寫入 S
+			var retina = _TD.retina;
+			
+			if (imagesLoaded && buildingImages["super_gun"]) {
+				var img = buildingImages["super_gun"];
+				var imgSize = 24 * retina; // 菱形大小
+				ctx.drawImage(img, b.cx - imgSize/2, b.cy - imgSize/2, imgSize, imgSize);
+			} else {
+				// 原始繪製代碼作為備份
+				var size = 12 * retina;
+				ctx.fillStyle = "#FFD700";
+				ctx.strokeStyle = "#000";
+				ctx.lineWidth = 2 * retina;
+				ctx.beginPath();
+				ctx.moveTo(b.cx, b.cy - size);
+				ctx.lineTo(b.cx - size, b.cy);
+				ctx.lineTo(b.cx, b.cy + size);
+				ctx.lineTo(b.cx + size, b.cy);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+				
+				ctx.fillStyle = "#F00";
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.font = "bold " + (14 * retina) + "px 'Arial'";
+				ctx.fillText("S", b.cx, b.cy);
+			}
+			
+			// super_gun 的攻擊效果
+			if (b.type == "super_gun" && b.target && b.target.is_valid) {
+				ctx.lineWidth = 4 * _TD.retina;
+				ctx.strokeStyle = "rgba(255, 100, 100, 0.5)";
+				ctx.beginPath();
+				ctx.moveTo(b.cx, b.cy);
+				ctx.lineTo(b.target.cx, b.target.cy);
+				ctx.stroke();
+			}
 		}
 	};
 
