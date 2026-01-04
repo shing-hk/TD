@@ -183,7 +183,6 @@ _TD.a.push(function (TD) {
 		},
 		"laser_gun": function (b, ctx/*, map, gs, gs2*/) {
 //			var target_position = b.getTargetPosition();
-
 			ctx.fillStyle = "#f00";
 			ctx.strokeStyle = "#000";
 			ctx.beginPath();
@@ -223,6 +222,30 @@ _TD.a.push(function (TD) {
 			ctx.closePath();
 			ctx.fill();
 			ctx.stroke();
+		},
+		//add new weapon
+		"super_gun": function (b, ctx) {
+		    var retina = _TD.retina;
+		    var size = 12 * retina; // 菱形半徑
+		    // 1. 繪製金黃色菱形底座 (Diamond Shape)
+		    ctx.fillStyle = "#FFD700"; // 金色背景
+		    ctx.strokeStyle = "#000";   // 黑色外框
+		    ctx.lineWidth = 2 * retina;
+		    ctx.beginPath();
+		    ctx.moveTo(b.cx, b.cy - size);          // 上頂點
+		    ctx.lineTo(b.cx - size, b.cy);          // 左頂點
+		    ctx.lineTo(b.cx, b.cy + size);          // 下頂點
+		    ctx.lineTo(b.cx + size, b.cy);          // 右頂點
+		    ctx.closePath();                        // 封閉路徑回上頂點
+		    ctx.fill();
+		    ctx.stroke();
+		    // 2. 繪製紅色字母 "S"
+		    ctx.fillStyle = "#F00";                 // 紅色
+		    ctx.textAlign = "center";
+		    ctx.textBaseline = "middle";
+		    // 字體大小設定為菱形高度的一半左右
+		    ctx.font = "bold " + (14 * retina) + "px 'Arial'"; 
+		    ctx.fillText("S", b.cx, b.cy);          // 在中心點寫入 S
 		}
 	};
 

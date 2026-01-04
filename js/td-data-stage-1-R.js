@@ -193,6 +193,11 @@ _TD.a.push(function (TD) {
 								pos: [0, 1],
 								building: "laser_gun"
 							},
+							//add new weapon - super_gun
+							{
+								pos: [1, 1],
+								building: "super_gun"
+							},
 							{
 								pos: [2, 2],
 								building: "wall"
@@ -208,7 +213,7 @@ _TD.a.push(function (TD) {
 					max_wave: -1,
 					wave_damage: 0, // How many points of health damage caused by a current wave of monsters
 					max_monsters_per_wave: 100, // How many monsters per wave
-					money: 100000000,
+					money: 10000,
 					score: 0, // Points at the start
 					life: 100,
 					waves: [ // Here only the first 10 wave monsters are defined, automatically generated from the 11th wave.

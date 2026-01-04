@@ -185,9 +185,6 @@ _TD.a.push(function (TD) {
 			ctx.fillText("Speed " + speedValue.toFixed(2), 
 			    this.x, this.y + 240 * _TD.retina);
 
-
-
-
 			ctx.closePath();
 
 			if (this._life_recover_wait) {

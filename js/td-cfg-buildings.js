@@ -90,6 +90,16 @@ _TD.a.push(function (TD) {
 				life: 100,
 				shield: 100,
 				cost: 2000
+			},
+			// add new weapon - super_gun
+			"super_gun": {
+				damage: 1000,
+				range: 1,
+				max_range: 2,
+				speed: 20,
+				life: 100,
+				shield: 100,
+				cost: 8888
 			}
 		};
 

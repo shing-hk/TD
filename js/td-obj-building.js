@@ -241,6 +241,13 @@ _TD.a.push(function (TD) {
 				return;
 			}
 
+			//add new weapon
+			if (this.type == "super_gun") {
+				// 如果是激光枪，目标立刻被击中
+				this.target.beHit(this, this.damage);
+				return;
+			}
+
 			var muzzle = this.muzzle || [this.cx, this.cy], // 炮口的位置
 				cx = muzzle[0],
 				cy = muzzle[1];
@@ -388,6 +395,24 @@ _TD.a.push(function (TD) {
 				ctx.lineTo(this.cx, this.cy);
 				ctx.closePath();
 				ctx.stroke();
+			}
+
+			//add new weapon
+			if (this.type == "super_gun" && this.target && this.target.is_valid) {
+				// 画激光
+				ctx.lineWidth = 4 * _TD.retina;
+				ctx.strokeStyle = "rgba(255, 100, 100, 0.5)";
+				ctx.beginPath();
+				ctx.moveTo(this.cx, this.cy);
+				ctx.lineTo(this.target.cx, this.target.cy);
+				//ctx.closePath();
+				ctx.stroke();
+				ctx.lineWidth = _TD.retina;
+				ctx.strokeStyle = "rgba(255, 200, 200, 0.8)";
+				ctx.beginPath();
+				ctx.moveTo(this.cx, this.cy); // 修正起點
+			    	ctx.lineTo(this.target.cx, this.target.cy); // 修正終點，確保畫出內芯
+			    	ctx.stroke();
 			}
 		},
 
