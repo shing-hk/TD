@@ -195,8 +195,10 @@ _TD.a.push(function (TD) {
 			this.del();
 		},
 
+
+		//modification from "random attack" to "closest to exit"
 		/**
-		 * 寻找一个目标（怪物）
+		 * 尋找一個目標（最靠近出口的怪物）
 		 */
 		findTarget: function () {
 			if (!this.is_weapon || this.is_pre_building || !this.grid) return;
@@ -204,18 +206,31 @@ _TD.a.push(function (TD) {
 			var cx = this.cx, cy = this.cy,
 				range2 = Math.pow(this.range_px, 2);
 
-			// 如果当前建筑有目标，并且目标还是有效的，并且目标仍在射程内
+			// 如果當前建築已有目標，且目標有效且仍在射程內，則繼續攻擊該目標（保持鎖定）
 			if (this.target && this.target.is_valid &&
 				Math.pow(this.target.cx - cx, 2) + Math.pow(this.target.cy - cy, 2) <= range2)
 				return;
 
-			// 在进入射程的怪物中寻找新的目标
-			this.target = TD.lang.any(
-				TD.lang.rndSort(this.map.monsters), // 将怪物随机排序
-				function (obj) {
-					return Math.pow(obj.cx - cx, 2) + Math.pow(obj.cy - cy, 2) <= range2;
+			// 獲取射程內的所有怪物
+			var monstersInRange = this.map.monsters.filter(function (obj) {
+				return obj.is_valid && (Math.pow(obj.cx - cx, 2) + Math.pow(obj.cy - cy, 2) <= range2);
+			});
+
+			if (monstersInRange.length > 0) {
+				// 根據怪物到終點的距離進行排序
+				// 在 Oldj 引擎中，obj.passed_dist 代表怪物已經走過的距離
+				// 走得越遠的怪物（passed_dist 越大），代表越靠近出口
+				monstersInRange.sort(function (a, b) {
+					return b.passed_dist - a.passed_dist; 
 				});
+
+				// 選取排序後的第一個（最靠近出口的）
+				this.target = monstersInRange[0];
+			} else {
+				this.target = null;
+			}
 		},
+
 
 		/**
 		 * 取得目标的坐标（相对于地图左上角）
