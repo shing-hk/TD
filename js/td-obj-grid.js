@@ -11,6 +11,63 @@
 // _TD.a.push begin
 _TD.a.push(function (TD) {
 
+	// 1. 定義不可通行格子的渲染風格
+	var impassableTileStyles = {
+		color: {
+			render: function(ctx, px, py, width, height) {
+				ctx.fillStyle = "#e0e0e0"; // 淺灰色
+				ctx.fillRect(px, py, width, height);
+				// 可選：添加斜線
+				ctx.strokeStyle = "#999";
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.moveTo(px, py);
+				ctx.lineTo(px + width, py + height);
+				ctx.stroke();
+			}
+		},
+		png: {
+			image: null,
+			load: function() {
+				this.image = new Image();
+				this.image.src = "images/impassable_tile.png";
+			},
+			render: function(ctx, px, py, width, height) {
+				if (this.image && this.image.complete) {
+					ctx.drawImage(this.image, px, py, width, height);
+				} else {
+					impassableTileStyles.color.render(ctx, px, py, width, height);
+				}
+			}
+		},
+		pattern: {
+			render: function(ctx, px, py, width, height) {
+				// 創建棋盤格圖案
+				ctx.fillStyle = "#ccc";
+				ctx.fillRect(px, py, width, height);
+				
+				ctx.fillStyle = "#aaa";
+				var cellSize = 4;
+				for (var y = 0; y < height; y += cellSize * 2) {
+					for (var x = 0; x < width; x += cellSize * 2) {
+						ctx.fillRect(px + x, py + y, cellSize, cellSize);
+						ctx.fillRect(px + x + cellSize, py + y + cellSize, cellSize, cellSize);
+					}
+				}
+			}
+		}
+	};
+
+	// 選擇使用的風格
+	var currentImpassableStyle = "png"; // 可以改成 "color" 或 "pattern"
+
+	// 初始化 PNG 風格
+	if (currentImpassableStyle === "png") {
+		impassableTileStyles.png.load();
+	}
+	// ============ 添加結束 ============
+
+
 	// The properties and methods of the grid object. Note that there are no arrays, objects, etc. in the properties.
 	// Reference properties, otherwise the related properties of multiple instances will conflict
 	var grid_obj = {
@@ -166,14 +223,15 @@ _TD.a.push(function (TD) {
 				ctx.fill();
 			}
 
+			//update
 			if (this.passable_flag == 0) {
-				// Not passable
-				ctx.fillStyle = "#fcc";
-				ctx.beginPath();
-				ctx.fillRect(px, py, this.width, this.height);
-				ctx.closePath();
-				ctx.fill();
+				// Not passable - 使用配置的風格渲染
+				impassableTileStyles[currentImpassableStyle].render(
+					ctx, px, py, this.width, this.height
+				);
 			}
+			//update
+
 
 			/**
 			 * Drawing entrance and exit

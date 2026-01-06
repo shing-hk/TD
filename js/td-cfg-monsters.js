@@ -7,18 +7,102 @@
  * 本文件定义了怪物默认属性及渲染方法
  */
 
-
 // _TD.a.push begin
 _TD.a.push(function (TD) {
 
-	/**
-	 * 默认的怪物渲染方法
-	 */
-	function defaultMonsterRender() {
-		if (!this.is_valid || !this.grid) return;
-		var ctx = TD.ctx;
+	// 預先載入怪物圖片
+	var monsterImages = {};
+	var monsterImagesLoaded = false;
+	
+	// 怪物圖片列表（對應不同類型的怪物）
+	var monsterImageList = [
+		{ idx: 0, src: "images/monster_0.png" },  // monster 1
+		{ idx: 1, src: "images/monster_1.png" },  // monster 2
+		{ idx: 2, src: "images/monster_2.png" },  // monster speed
+		{ idx: 3, src: "images/monster_3.png" },  // monster life
+		{ idx: 4, src: "images/monster_4.png" },  // monster shield
+		{ idx: 5, src: "images/monster_5.png" },  // monster damage
+		{ idx: 6, src: "images/monster_6.png" },  // monster speed-life
+		{ idx: 7, src: "images/monster_7.png" },  // monster speed-2
+		{ idx: 8, src: "images/monster_8.png" }   // monster shield-life
+	];
+	
+	// 載入所有怪物圖片
+	function loadMonsterImages() {
+		var imagesToLoad = monsterImageList.length;
+		var imagesLoadedCount = 0;
+		
+		monsterImageList.forEach(function(item) {
+			var img = new Image();
+			img.onload = function() {
+				imagesLoadedCount++;
+				if (imagesLoadedCount === imagesToLoad) {
+					monsterImagesLoaded = true;
+					TD.log("所有怪物圖片載入完成");
+				}
+			};
+			img.onerror = function() {
+				TD.log("載入怪物圖片失敗: " + item.src);
+				imagesLoadedCount++;
+				// 即使圖片載入失敗，也繼續執行
+				if (imagesLoadedCount === imagesToLoad) {
+					monsterImagesLoaded = true;
+				}
+			};
+			img.src = item.src;
+			monsterImages[item.idx] = img;
+		});
+	}
+	
+	// 開始載入圖片
+	loadMonsterImages();
 
-		// 画一个圆代表怪物
+	/**
+	 * 默认的怪物渲染方法（使用PNG圖片）
+	 */
+function defaultMonsterRender() {
+    if (!this.is_valid || !this.grid) return;
+    var ctx = TD.ctx;
+
+    // 如果有對應的怪物圖片，使用圖片渲染
+    if (monsterImagesLoaded && monsterImages[this.idx]) {
+        var img = monsterImages[this.idx];
+        
+        // 固定圖片大小，不依賴 this.r
+        var imgSize = TD.grid_size * 0.5; // 使用格子大小的%50
+        // 或者使用固定像素大小
+        // var imgSize = 24; // 固定24像素
+        
+        // 如果圖片載入成功，使用圖片
+        if (img.complete && img.naturalWidth > 0) {
+            ctx.drawImage(img, 
+                this.cx - imgSize/2, 
+                this.cy - imgSize/2, 
+                imgSize, 
+                imgSize
+            );
+            
+            // 仍然繪製生命條（如果需要）
+            if (TD.show_monster_life) {
+                var s = Math.floor(TD.grid_size / 4),
+                    l = s * 2 - 2 * _TD.retina;
+                // 調整生命條位置（因為圖片大小改變了）
+                var lifeBarY = this.cy - imgSize/2 - 6;
+                ctx.fillStyle = "#000";
+                ctx.beginPath();
+                ctx.fillRect(this.cx - s, lifeBarY, s * 2, 4 * _TD.retina);
+                ctx.closePath();
+                ctx.fillStyle = "#f00";
+                ctx.beginPath();
+                ctx.fillRect(this.cx - s + _TD.retina, lifeBarY + _TD.retina, 
+                    this.life * l / this.life0, 2 * _TD.retina);
+                ctx.closePath();
+            }
+            return;
+        }
+    }
+		
+		// 如果沒有圖片或圖片載入失敗，使用原始的圓形渲染
 		ctx.strokeStyle = "#000";
 		ctx.lineWidth = 1;
 		ctx.fillStyle = this.color;
@@ -38,7 +122,8 @@ _TD.a.push(function (TD) {
 			ctx.closePath();
 			ctx.fillStyle = "#f00";
 			ctx.beginPath();
-			ctx.fillRect(this.cx - s + _TD.retina, this.cy - this.r - (6 - _TD.retina), this.life * l / this.life0, 2 * _TD.retina);
+			ctx.fillRect(this.cx - s + _TD.retina, this.cy - this.r - (6 - _TD.retina), 
+				this.life * l / this.life0, 2 * _TD.retina);
 			ctx.closePath();
 		}
 	}
@@ -189,6 +274,5 @@ _TD.a.push(function (TD) {
 
 		return a;
 	};
-
 
 }); // _TD.a.push end

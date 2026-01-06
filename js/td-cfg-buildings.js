@@ -93,8 +93,8 @@ _TD.a.push(function (TD) {
 			},
 			// add new weapon - super_gun
 			"super_gun": {
-				damage: 1000,
-				range: 1,
+				damage: 250,
+				range: 2,
 				max_range: 2,
 				speed: 20,
 				life: 100,

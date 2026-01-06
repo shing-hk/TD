@@ -177,11 +177,11 @@ _TD.a.push(function (TD) {
 							},
 							{
 								pos: [1, 0],
-								building: "cannon"
+								building: "HMG"
 							},
 							{
 								pos: [2, 0],
-								building: "HMG"
+								building: "cannon"
 							},
 							{
 								pos: [0, 1],
@@ -193,7 +193,7 @@ _TD.a.push(function (TD) {
 								building: "super_gun"
 							},
 							{
-								pos: [2, 2],
+								pos: [0, 2],
 								building: "wall"
 							}
 						]
