@@ -56,6 +56,7 @@ font-size: 16px;
 #td-board canvas#td-canvas {
 position: relative;
 background: #fff;
+background-image: url("../images/bg.png") !important;
 border: solid 1px #cdf;
 }
 #td-loading {
