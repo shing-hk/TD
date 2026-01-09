@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2011.
  *
@@ -101,21 +100,21 @@ _TD.a.push(function (TD) {
 
 //shing
     // Generate random coordinates within specified bounds
-    // Entrance: rows 0-3, columns 0-15
+    // Entrance: rows 0-2, columns 0-12
     var randomEntrance = [
-        Math.floor(Math.random() * 4),  // row 0-3
-        Math.floor(Math.random() * 16)  // col 0-15
+        Math.floor(Math.random() * 3),  // row 0-2
+        Math.floor(Math.random() * 11)  // col 0-12
     ];
-    // Exit: rows 12-15, columns 0-15
+    // Exit: rows 11-12, columns 0-12
     var randomExit = [
-        Math.floor(Math.random() * 4) + 12, // row 12-15
-        Math.floor(Math.random() * 16)      // col 0-15
+        Math.floor(Math.random() * 2) + 10, // row 11-12
+        Math.floor(Math.random() * 11)      // col 0-12
     ];
 //shing
 		var data = {
 			stage_main: {
-				width: 640 * _TD.retina, // px
-				height: 560 * _TD.retina,
+				width: 540 * _TD.retina,  // 640px
+				height: 450 * _TD.retina, // 560px
 				init: _stage_main_init,
 				step2: _stage_main_step2
 			},
@@ -123,8 +122,8 @@ _TD.a.push(function (TD) {
 			scene_endless: {
 				// scene 1
 				map: {
-					grid_x: 16,
-					grid_y: 16,
+					grid_x: 12,
+					grid_y: 12,
 					x: TD.padding,
 					y: TD.padding,
 //					entrance: [0, 0],
@@ -134,42 +133,30 @@ _TD.a.push(function (TD) {
 //					grids_cfg: []
 					grids_cfg: [
 						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)],
+							pos: [Math.floor(Math.random()*6)+4, Math.floor(Math.random()*2)],
 							passable_flag: 0
 						},
 						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+2],
+							pos: [Math.floor(Math.random()*6)+4, Math.floor(Math.random()*2)+2],
 							building: "wall"
 						},
 						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+4],
+							pos: [Math.floor(Math.random()*6)+4, Math.floor(Math.random()*2)+4],
 							passable_flag: 0
 						},
 						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+6],
+							pos: [Math.floor(Math.random()*6)+4, Math.floor(Math.random()*2)+6],
 							building: "wall"
 						},
 						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+8],
-							passable_flag: 0
-						},
-						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+10],
-							passable_flag: 0
-						},
-						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+12],
-							building: "wall"
-						},
-						{
-							pos: [Math.floor(Math.random()*8)+4, Math.floor(Math.random()*2)+13],
+							pos: [Math.floor(Math.random()*6)+4, Math.floor(Math.random()*2)+8],
 							passable_flag: 0
 						}
 					]
 
 				},
 				panel: {
-					x: TD.padding * 2 + TD.grid_size * 16,
+					x: TD.padding * 2 + TD.grid_size * 12, // size*16
 					y: TD.padding,
 					map: {
 						grid_x: 3,
@@ -342,3 +329,5 @@ _TD.a.push(function (TD) {
 	};
 
 }); // _TD.a.push end
+
+
