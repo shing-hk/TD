@@ -17,11 +17,12 @@ function m(t){var e=document.createElement("div");e.textContent=t,e.style="posit
 <!-- 左侧按钮面板 -->
 <div id="left-panel" style="
     position: fixed;
-    left: 50px;
-    top: 50px;
+    left: 50px;               /* 距離左側的距離，可自行調整 */
+    top: 40%;                 /* 垂直定位在頁面 40% 處 */
+    transform: translateY(-50%); /* 向上偏移自身高度的一半，達到完全垂直居中 */
     width: 250px;
     background: rgba(255, 255, 255, 0.95);
-    border: 2px solid #d32f2f;
+    border: 2px solid #888888;
     border-radius: 10px;
     padding: 10px;
     //z-index: 9999;
@@ -34,9 +35,9 @@ function m(t){var e=document.createElement("div");e.textContent=t,e.style="posit
         <div style="font-weight: bold; color: #333; margin-bottom: 5px;">Settings</div>
         <div style="display: flex; flex-direction: column; gap: 5px;">
             <!-- 按钮1-10 -->
-        <button onclick="window.open('./td.html', '_self');" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map - Blank</button>
-        <button onclick="window.open('./td-R.html', '_self')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map - Random</button>
-        <button onclick="window.open('./td-8.html', '_self')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map - Mini</button>
+        <button onclick="window.open('./td.html', '_self');" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map 16x16</button>
+        <button onclick="window.open('./td-12.html', '_self')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map 12x12</button>
+        <button onclick="window.open('./td-8.html', '_self')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map 8x8</button>
         <button onclick="location.reload();" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">New Game</button>
 
         </div>
