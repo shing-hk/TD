@@ -8,10 +8,10 @@
 
 <script>
 //message text
-function m(t){var e=document.createElement("div");e.textContent=t,e.style="position:fixed;top:50%;left:10%;transform:translate(-50%,-50%);background:#000;color:#fff;padding:10px 20px;border-radius:5px;z-index:10000;opacity:0;transition:opacity 0.2s";document.body.appendChild(e);setTimeout(()=>e.style.opacity=1,10);setTimeout(()=>{e.style.opacity=0;setTimeout(()=>e.remove(),200)},2000)}
+function m(t){var e=document.createElement("div");e.textContent=t,e.style="position:fixed;top:50%;left:10%;transform:translate(-50%,-50%);background:#000;color:#FFD700;padding:10px 20px;border-radius:5px;z-index:10000;opacity:0;transition:opacity 0.2s";document.body.appendChild(e);setTimeout(()=>e.style.opacity=1,10);setTimeout(()=>{e.style.opacity=0;setTimeout(()=>e.remove(),200)},2000)}
 </script>
 
-<body id="tower-defense">
+<body id="tower-defense"  style="background-image: url('./images/bg.png');">
 
 
 <!-- 左侧按钮面板 -->
@@ -27,6 +27,7 @@ function m(t){var e=document.createElement("div");e.textContent=t,e.style="posit
     padding: 10px;
     //z-index: 9999;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+       background-image: url('./images/bg2.png');
 ">
 
 <div style="display: flex; gap: 15px; margin: 10px 0;">
@@ -35,10 +36,10 @@ function m(t){var e=document.createElement("div");e.textContent=t,e.style="posit
         <div style="font-weight: bold; color: #333; margin-bottom: 5px;">Settings</div>
         <div style="display: flex; flex-direction: column; gap: 5px;">
             <!-- 按钮1-10 -->
-        <button onclick="window.open('./td.html', '_self');" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map 16x16</button>
-        <button onclick="window.open('./td-12.html', '_self')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map 12x12</button>
-        <button onclick="window.open('./td-8.html', '_self')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Map 8x8</button>
-        <button onclick="location.reload();" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">New Game</button>
+        <button onclick="window.open('./td.html', '_self');" style="width:100px; padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Map 16x16</button>
+        <button onclick="window.open('./td-12.html', '_self')" style="width:100px; padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Map 12x12</button>
+        <button onclick="window.open('./td-8.html', '_self')" style="width:100px; padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Map 8x8</button>
+        <button onclick="location.reload();" style="width:100px; padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">New Game</button>
 
         </div>
     </div>
@@ -48,24 +49,24 @@ function m(t){var e=document.createElement("div");e.textContent=t,e.style="posit
         <div style="font-weight: bold; color: #333; margin-bottom: 5px;">Hacks</div>
         <div style="display: flex; flex-direction: column; gap: 5px;">
             <!-- 按钮11-20 -->
-        <button onclick="_TD.cheat='money+'; m('Money added')" style="width:100px; padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Money +</button>
-        <button onclick="_TD.cheat='life+'; m('Life added')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Life +</button>
-        <button onclick="_TD.cheat='life-'; m('Life reduced')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Life -</button>
-        <button onclick="_TD.cheat='difficulty+'; m('Difficulty +')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Difficulty +</button>
-        <button onclick="_TD.cheat='difficulty-'; m('Difficulty -')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Difficulty -</button>
-        <button onclick="_TD.cheat='speed+'; m('Speed +')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Speed +</button>
-        <button onclick="_TD.cheat='speed-'; m('Speed -')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Speed -</button>
-        <button onclick="_TD.cheat='upgradeall'; m('Upgrade all buildings')" style="padding:5px; background:#fff; border:1px solid #4CAF50; border-radius:4px;">Upgrade Bldg</button>
+        <button onclick="_TD.cheat='money+'; m('Money added')" style="width:100px; padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Money +</button>
+        <button onclick="_TD.cheat='life+'; m('Life added')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Life +</button>
+        <button onclick="_TD.cheat='life-'; m('Life reduced')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Life -</button>
+        <button onclick="_TD.cheat='difficulty+'; m('Difficulty +')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Difficulty +</button>
+        <button onclick="_TD.cheat='difficulty-'; m('Difficulty -')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Difficulty -</button>
+        <button onclick="_TD.cheat='speed+'; m('Speed +')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Speed +</button>
+        <button onclick="_TD.cheat='speed-'; m('Speed -')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Speed -</button>
+        <button onclick="_TD.cheat='upgradeall'; m('Upgrade all buildings')" style="padding:5px; background:#FFD700; border:1px solid #888888; border-radius:4px;">Upgrade Bldg</button>
 
         </div>
     </div>
 </div>
 </div>
 
-<div id="wrapper">
-	<div id="td-wrapper">
-		<div id="td-loading">Loading...</div>
-		<div id="td-board">
+<div id="wrapper" style="background-image: url('./images/bg.png');">
+	<div id="td-wrapper" style="background-image: url('./images/bg.png');">
+		<div id="td-loading" style="background-image: url('./images/bg.png');">Loading...</div>
+		<div id="td-board" style="background-image: url('./images/bg.png');">
 			<canvas id="td-canvas">Sorry, your browser does not support the HTML 5 Canvas tag. Please use the browsers IE9 / Chrome / Opera to browse this page for best results.</canvas>
 		</div>
 	</div>
