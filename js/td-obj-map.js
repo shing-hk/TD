@@ -352,7 +352,7 @@ _TD.a.push(function (TD) {
 			 ctx.clearRect(this.x2, 0, this.w2, this.h2);*/
 
 			//ctx.fillStyle = "#fff";
-			ctx.fillStyle = "#D0F4FC";
+			ctx.fillStyle = "#F5DEB3"; //淺黃棕色 (Wheat), 溫和的羊皮紙色, 遊戲日誌, 背景底色
 			ctx.beginPath();
 			ctx.fillRect(0, 0, this.x1, this.h);
 			ctx.fillRect(0, 0, this.w, this.y1);
